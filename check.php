@@ -1,22 +1,28 @@
 <?php
-$host 	= 	"localhost";
-$username = 	"root";
-$password =	"";
-$db_name=	"user";
-$tbl_name= "members";
+$host 	= "localhost";
+$username ="root";
+$password ="";
+$db_name="user";
 
-mysql_connect("$host","$username","$password") or die ("cannot connect");
-mysql_select_db("$db_name")or die ("cannot select database");
+
+// Create connection
+$conn = new mysqli($host, $username, $password,$db_name);
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
 
 $myusername = $_POST['txtUser'];
 $mypassword = $_POST['txtPass'];
 
-$sql="SELECT * FROM $tbl_name WHERE Username ='$myusername' and pasword = '$mypassword'";
-$result= mysql_query($sql);
 
-$count =mysql_num_rows($result);
+$sql = "SELECT * FROM members WHERE Username ='$myusername' and pasword = '$mypassword'";
 
-if($count==1){
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+
 	
 header("location:loginsuccessfully.php");	
 }
@@ -27,6 +33,6 @@ else{
 
 
 
-
+$conn->close();
 
 ?>
